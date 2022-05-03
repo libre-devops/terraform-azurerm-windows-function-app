@@ -23,33 +23,31 @@ resource "azurerm_windows_function_app" "function_app" {
     for_each = lookup(var.settings, "site_config", {}) != {} ? [1] : []
 
     content {
-      always_on                                     = lookup(var.settings.site_config, "always_on", false)
-      api_definition_url                            = lookup(var.settings.site_config, "api_definition_url", null)
-      api_management_api_id                         = lookup(var.settings.site_config, "api_management_api_id", null)
-      app_command_line                              = lookup(var.settings.site_config, "app_command_line", null)
-      application_insights_connection_string        = lookup(var.settings.site_config, "application_insights_connection_string", null)
-      application_insights_key                      = lookup(var.settings.site_config, "application_insights_key", null)
-      container_registry_managed_identity_client_id = lookup(var.settings.site_config, "container_registry_managed_identity_client_id", null)
-      container_registry_use_managed_identity       = lookup(var.settings.site_config, "container_registry_use_managed_identity", false)
-      elastic_instance_minimum                      = lookup(var.settings.site_config, "elastic_instance_minimum", null)
-      ftps_state                                    = lookup(var.settings.site_config, "ftps_state", null)
-      health_check_path                             = lookup(var.settings.site_config, "health_check_path", null)
-      health_check_eviction_time_in_min             = lookup(var.settings.site_config, "health_check_eviction_time_in_min", null)
-      http2_enabled                                 = lookup(var.settings.site_config, "http2_enabled", null)
-      load_balancing_mode                           = lookup(var.settings.site_config, "load_balancing_mode", null)
-      managed_pipeline_mode                         = lookup(var.settings.site_config, "managed_pipeline_mode", null)
-      minimum_tls_version                           = lookup(var.settings.site_config, "minimum_tls_version", null)
-      pre_warmed_instance_count                     = lookup(var.settings.site_config, "pre_warmed_instance_count", null)
-      remote_debugging_enabled                      = lookup(var.settings.site_config, "remote_debugging_enabled", null)
-      remote_debugging_version                      = lookup(var.settings.site_config, "remote_debugging_version", null)
-      runtime_scale_monitoring_enabled              = lookup(var.settings.site_config, "runtime_scale_monitoring_enabled", null)
-      scm_minimum_tls_version                       = lookup(var.settings.site_config, "scm_minimum_tls_version", null)
-      scm_use_main_ip_restriction                   = lookup(var.settings.site_config, "scm_use_main_ip_restriction", null)
-      use_32_bit_worker                             = lookup(var.settings.site_config, "use_32_bit_worker", null)
-      app_scale_limit                               = lookup(var.settings.site_config, "app_scale_limit", null)
-      websockets_enabled                            = lookup(var.settings.site_config, "websockets_enabled", null)
-      vnet_route_all_enabled                        = lookup(var.settings.site_config, "vnet_route_all_enabled", null)
-      worker_count                                  = lookup(var.settings.site_config, "worker_count", null)
+      always_on                              = lookup(var.settings.site_config, "always_on", false)
+      api_definition_url                     = lookup(var.settings.site_config, "api_definition_url", null)
+      api_management_api_id                  = lookup(var.settings.site_config, "api_management_api_id", null)
+      app_command_line                       = lookup(var.settings.site_config, "app_command_line", null)
+      application_insights_connection_string = lookup(var.settings.site_config, "application_insights_connection_string", null)
+      application_insights_key               = lookup(var.settings.site_config, "application_insights_key", null)
+      elastic_instance_minimum               = lookup(var.settings.site_config, "elastic_instance_minimum", null)
+      ftps_state                             = lookup(var.settings.site_config, "ftps_state", null)
+      health_check_path                      = lookup(var.settings.site_config, "health_check_path", null)
+      health_check_eviction_time_in_min      = lookup(var.settings.site_config, "health_check_eviction_time_in_min", null)
+      http2_enabled                          = lookup(var.settings.site_config, "http2_enabled", null)
+      load_balancing_mode                    = lookup(var.settings.site_config, "load_balancing_mode", null)
+      managed_pipeline_mode                  = lookup(var.settings.site_config, "managed_pipeline_mode", null)
+      minimum_tls_version                    = lookup(var.settings.site_config, "minimum_tls_version", null)
+      pre_warmed_instance_count              = lookup(var.settings.site_config, "pre_warmed_instance_count", null)
+      remote_debugging_enabled               = lookup(var.settings.site_config, "remote_debugging_enabled", null)
+      remote_debugging_version               = lookup(var.settings.site_config, "remote_debugging_version", null)
+      runtime_scale_monitoring_enabled       = lookup(var.settings.site_config, "runtime_scale_monitoring_enabled", null)
+      scm_minimum_tls_version                = lookup(var.settings.site_config, "scm_minimum_tls_version", null)
+      scm_use_main_ip_restriction            = lookup(var.settings.site_config, "scm_use_main_ip_restriction", null)
+      use_32_bit_worker                      = lookup(var.settings.site_config, "use_32_bit_worker", null)
+      app_scale_limit                        = lookup(var.settings.site_config, "app_scale_limit", null)
+      websockets_enabled                     = lookup(var.settings.site_config, "websockets_enabled", null)
+      vnet_route_all_enabled                 = lookup(var.settings.site_config, "vnet_route_all_enabled", null)
+      worker_count                           = lookup(var.settings.site_config, "worker_count", null)
 
       // Expects a list, but doesn't like to list conversion
       # default_documents                             = tolist(lookup(var.settings.site_config, "default_documents", false))
@@ -75,16 +73,6 @@ resource "azurerm_windows_function_app" "function_app" {
           powershell_core_version = lookup(var.settings.site_config.application_stack, "powershell_core_version", null)
           use_custom_runtime      = lookup(var.settings.site_config.application_stack, "use_custom_runtime", null)
 
-          dynamic "docker" {
-            for_each = lookup(var.settings.site_config.application_stack, "docker", {}) != {} ? [1] : []
-            content {
-              registry_url      = lookup(var.settings.site_config.application_stack.docker, "registry_url", null)
-              registry_username = lookup(var.settings.site_config.application_stack.docker, "registry_url", null)
-              registry_password = lookup(var.settings.site_config.application_stack.docker, "registry_password", null)
-              image_name        = lookup(var.settings.site_config.application_stack.docker, "image_name", null)
-              image_tag         = lookup(var.settings.site_config.application_stack.docker, "image_tag", null)
-            }
-          }
         }
       }
 
