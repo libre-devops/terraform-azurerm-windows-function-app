@@ -65,7 +65,7 @@ module "fnc_plan" {
   app_service_plan_name          = "asp-${var.short}-${var.loc}-${terraform.workspace}-01"
   add_to_app_service_environment = false
 
-  os_type  = "Linux"
+  os_type  = "Windows"
   sku_name = "Y1"
 }
 
