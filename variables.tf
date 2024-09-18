@@ -31,6 +31,9 @@ variable "windows_function_apps" {
     storage_account_access_key                     = optional(string)
     storage_key_vault_secret_id                    = optional(string)
     storage_uses_managed_identity                  = optional(bool)
+    create_new_app_insights                        = optional(bool, false)
+    workspace_id                                   = optional(string)
+    app_insights_name                              = optional(string)
     storage_account = optional(object({
       access_key   = string
       account_name = string
