@@ -34,6 +34,16 @@ variable "windows_function_apps" {
     create_new_app_insights                        = optional(bool, false)
     workspace_id                                   = optional(string)
     app_insights_name                              = optional(string)
+    app_insights_type                              = optional(string, "Web")
+    app_insights_daily_cap_in_gb                   = optional(number)
+    app_insights_daily_data_cap_notifications_disabled = optional(bool, false)
+    app_insights_internet_ingestion_enabled        = optional(bool)
+    app_insights_internet_query_enabled            = optional(bool)
+    app_insights_local_authentication_disabled     = optional(bool, true)
+    app_insights_force_customer_storage_for_profile= optional(bool, false)
+    app_insights_sampling_percentage               = optional(number, 100)
+    tags                                           = optional(map(string))
+
     storage_account = optional(object({
       access_key   = string
       account_name = string
