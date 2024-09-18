@@ -9,26 +9,26 @@ resource "azurerm_service_plan" "service_plan" {
 }
 
 resource "azurerm_windows_function_app" "function_app" {
-  for_each                    = { for app in var.windows_function_apps : app.name => app }
-  name                        = each.value.name
-  service_plan_id             = each.value.service_plan_id != null ? each.value.service_plan_id : lookup(azurerm_service_plan.service_plan, each.key, null).id
-  location                    = each.value.location
-  resource_group_name         = each.value.rg_name
-  app_settings                = each.value.app_settings
-  https_only                  = each.value.https_only
-  tags                        = each.value.tags
-  builtin_logging_enabled     = each.value.builtin_logging_enabled
-  client_certificate_enabled  = each.value.client_certificate_enabled
-  client_certificate_mode     = each.value.client_certificate_mode
-  client_certificate_exclusion_paths = each.value.client_certificate_exclusion_paths
-  daily_memory_time_quota     = each.value.daily_memory_time_quota
-  content_share_force_disabled = each.value.content_share_force_disabled
-  ftp_publish_basic_authentication_enabled = each.value.ftp_publish_basic_authentication_enabled
-  public_network_access_enabled = each.value.public_network_access_enabled
-  key_vault_reference_identity_id = each.value.key_vault_reference_identity_id
-  virtual_network_subnet_id = each.value.virtual_network_subnet_id
+  for_each                                       = { for app in var.windows_function_apps : app.name => app }
+  name                                           = each.value.name
+  service_plan_id                                = each.value.service_plan_id != null ? each.value.service_plan_id : lookup(azurerm_service_plan.service_plan, each.key, null).id
+  location                                       = each.value.location
+  resource_group_name                            = each.value.rg_name
+  app_settings                                   = each.value.app_settings
+  https_only                                     = each.value.https_only
+  tags                                           = each.value.tags
+  builtin_logging_enabled                        = each.value.builtin_logging_enabled
+  client_certificate_enabled                     = each.value.client_certificate_enabled
+  client_certificate_mode                        = each.value.client_certificate_mode
+  client_certificate_exclusion_paths             = each.value.client_certificate_exclusion_paths
+  daily_memory_time_quota                        = each.value.daily_memory_time_quota
+  content_share_force_disabled                   = each.value.content_share_force_disabled
+  ftp_publish_basic_authentication_enabled       = each.value.ftp_publish_basic_authentication_enabled
+  public_network_access_enabled                  = each.value.public_network_access_enabled
+  key_vault_reference_identity_id                = each.value.key_vault_reference_identity_id
+  virtual_network_subnet_id                      = each.value.virtual_network_subnet_id
   webdeploy_publish_basic_authentication_enabled = each.value.webdeploy_publish_basic_authentication_enabled
-  zip_deploy_file = each.value.zip_deploy_file
+  zip_deploy_file                                = each.value.zip_deploy_file
 
 
   enabled                     = each.value.enabled
@@ -134,9 +134,9 @@ resource "azurerm_windows_function_app" "function_app" {
         for_each = auth_settings.value.active_directory != null ? [auth_settings.value.active_directory] : []
 
         content {
-          client_id         = active_directory.value.client_id
-          client_secret     = active_directory.value.client_secret
-          allowed_audiences = active_directory.value.allowed_audiences
+          client_id                  = active_directory.value.client_id
+          client_secret              = active_directory.value.client_secret
+          allowed_audiences          = active_directory.value.allowed_audiences
           client_secret_setting_name = active_directory.value.client_secret_setting_name
         }
       }
@@ -145,9 +145,9 @@ resource "azurerm_windows_function_app" "function_app" {
         for_each = auth_settings.value.facebook != null ? [auth_settings.value.facebook] : []
 
         content {
-          app_id       = facebook.value.app_id
-          app_secret   = facebook.value.app_secret
-          oauth_scopes = facebook.value.oauth_scopes
+          app_id                  = facebook.value.app_id
+          app_secret              = facebook.value.app_secret
+          oauth_scopes            = facebook.value.oauth_scopes
           app_secret_setting_name = facebook.value.app_secret_setting_name
         }
       }
@@ -156,10 +156,10 @@ resource "azurerm_windows_function_app" "function_app" {
         for_each = auth_settings.value.google != null ? [auth_settings.value.google] : []
 
         content {
-          client_id     = google.value.client_id
-          client_secret = google.value.client_secret
+          client_id                  = google.value.client_id
+          client_secret              = google.value.client_secret
           client_secret_setting_name = google.value.client_secret_setting_name
-          oauth_scopes  = google.value.oauth_scopes
+          oauth_scopes               = google.value.oauth_scopes
         }
       }
 
@@ -167,10 +167,10 @@ resource "azurerm_windows_function_app" "function_app" {
         for_each = auth_settings.value.microsoft != null ? [auth_settings.value.microsoft] : []
 
         content {
-          client_id     = microsoft.value.client_id
-          client_secret = microsoft.value.client_secret
+          client_id                  = microsoft.value.client_id
+          client_secret              = microsoft.value.client_secret
           client_secret_setting_name = microsoft.value.client_secret_setting_name
-          oauth_scopes  = microsoft.value.oauth_scopes
+          oauth_scopes               = microsoft.value.oauth_scopes
         }
       }
 
@@ -178,8 +178,8 @@ resource "azurerm_windows_function_app" "function_app" {
         for_each = auth_settings.value.twitter != null ? [auth_settings.value.twitter] : []
 
         content {
-          consumer_key    = twitter.value.consumer_key
-          consumer_secret = twitter.value.consumer_secret
+          consumer_key                 = twitter.value.consumer_key
+          consumer_secret              = twitter.value.consumer_secret
           consumer_secret_setting_name = twitter.value.consumer_secret_setting_name
         }
       }
@@ -346,46 +346,45 @@ resource "azurerm_windows_function_app" "function_app" {
     for_each = each.value.site_config != null ? [each.value.site_config] : []
 
     content {
-      always_on                                     = site_config.value.always_on
-      api_definition_url                            = site_config.value.api_definition_url
-      api_management_api_id                         = site_config.value.api_management_api_id
-      app_command_line                              = site_config.value.app_command_line
-      app_scale_limit = site_config.value.app_scale_limit
-      application_insights_connection_string        = site_config.value.application_insights_connection_string
-      application_insights_key                      = site_config.value.application_insights_ke
-      elastic_instance_minimum                      = site_config.value.elastic_instance_minimum
-      ftps_state                                    = site_config.value.ftps_state
-      health_check_path                             = site_config.value.health_check_path
-      health_check_eviction_time_in_min             = site_config.value.health_check_eviction_time_in_min
-      http2_enabled                                 = site_config.value.http2_enabled
-      ip_restriction_default_action                 = site_config.value.ip_restriction_default_action
-      load_balancing_mode                           = site_config.value.load_balancing_mode
-      managed_pipeline_mode                         = site_config.value.managed_pipeline_mode
-      minimum_tls_version                           = site_config.value.minimum_tls_version
-      pre_warmed_instance_count                     = site_config.value.pre_warmed_instance_count
-      remote_debugging_enabled                      = site_config.value.remote_debugging_enabled
-      remote_debugging_version                      = site_config.value.remote_debugging_version
-      runtime_scale_monitoring_enabled              = site_config.value.runtime_scale_monitoring_enabled
-      scm_ip_restriction_default_action             = site_config.value.scm_ip_restriction_default_action
-      scm_minimum_tls_version                       = site_config.value.scm_minimum_tls_version
-      scm_use_main_ip_restriction                   = site_config.value.scm_use_main_ip_restriction
-      use_32_bit_worker                             = site_config.value.use_32_bit_worker
-      app_scale_limit                               = site_config.value.app_scale_limit
-      websockets_enabled                            = site_config.value.websockets_enabled
-      vnet_route_all_enabled                        = site_config.value.vnet_route_all_enabled
-      worker_count                                  = site_config.value.worker_count
-      default_documents                             = toset(site_config.value.default_documents)
+      always_on                              = site_config.value.always_on
+      api_definition_url                     = site_config.value.api_definition_url
+      api_management_api_id                  = site_config.value.api_management_api_id
+      app_command_line                       = site_config.value.app_command_line
+      application_insights_connection_string = site_config.value.application_insights_connection_string
+      application_insights_key               = site_config.value.application_insights_ke
+      elastic_instance_minimum               = site_config.value.elastic_instance_minimum
+      ftps_state                             = site_config.value.ftps_state
+      health_check_path                      = site_config.value.health_check_path
+      health_check_eviction_time_in_min      = site_config.value.health_check_eviction_time_in_min
+      http2_enabled                          = site_config.value.http2_enabled
+      ip_restriction_default_action          = site_config.value.ip_restriction_default_action
+      load_balancing_mode                    = site_config.value.load_balancing_mode
+      managed_pipeline_mode                  = site_config.value.managed_pipeline_mode
+      minimum_tls_version                    = site_config.value.minimum_tls_version
+      pre_warmed_instance_count              = site_config.value.pre_warmed_instance_count
+      remote_debugging_enabled               = site_config.value.remote_debugging_enabled
+      remote_debugging_version               = site_config.value.remote_debugging_version
+      runtime_scale_monitoring_enabled       = site_config.value.runtime_scale_monitoring_enabled
+      scm_ip_restriction_default_action      = site_config.value.scm_ip_restriction_default_action
+      scm_minimum_tls_version                = site_config.value.scm_minimum_tls_version
+      scm_use_main_ip_restriction            = site_config.value.scm_use_main_ip_restriction
+      use_32_bit_worker                      = site_config.value.use_32_bit_worker
+      app_scale_limit                        = site_config.value.app_scale_limit
+      websockets_enabled                     = site_config.value.websockets_enabled
+      vnet_route_all_enabled                 = site_config.value.vnet_route_all_enabled
+      worker_count                           = site_config.value.worker_count
+      default_documents                      = toset(site_config.value.default_documents)
 
 
       dynamic "application_stack" {
         for_each = site_config.value.application_stack != null ? [site_config.value.application_stack] : []
         content {
-          java_version            = application_stack.value.java_version
-          dotnet_version          = application_stack.value.dotnet_version
+          java_version                = application_stack.value.java_version
+          dotnet_version              = application_stack.value.dotnet_version
           use_dotnet_isolated_runtime = application_stack.value.use_dotnet_isolated_runtime
-          node_version            = application_stack.value.node_version
-          powershell_core_version = application_stack.value.powershell_core_version
-          use_custom_runtime      = application_stack.value.use_custom_runtime
+          node_version                = application_stack.value.node_version
+          powershell_core_version     = application_stack.value.powershell_core_version
+          use_custom_runtime          = application_stack.value.use_custom_runtime
 
         }
       }
@@ -441,7 +440,7 @@ resource "azurerm_windows_function_app" "function_app" {
           name                      = scm_ip_restriction.value.name
           priority                  = scm_ip_restriction.value.priority
           action                    = scm_ip_restriction.value.action
-          description = scm_ip_restriction.value.descripton
+          description               = scm_ip_restriction.value.descripton
 
           dynamic "headers" {
             for_each = scm_ip_restriction.value.headers != null ? [scm_ip_restriction.value.headers] : []
@@ -466,3 +465,45 @@ resource "azurerm_app_service_virtual_network_swift_connection" "function_vnet_i
   subnet_id      = each.value.subnet_id
 }
 ```
+## Requirements
+
+No requirements.
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [azurerm_app_service_virtual_network_swift_connection.function_vnet_integration](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_virtual_network_swift_connection) | resource |
+| [azurerm_application_insights.app_insights_workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_insights) | resource |
+| [azurerm_service_plan.service_plan](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/service_plan) | resource |
+| [azurerm_windows_function_app.function_app](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_function_app) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_windows_function_apps"></a> [windows\_function\_apps](#input\_windows\_function\_apps) | List of Azure Windows Function Apps configurations | <pre>list(object({<br>    name                                           = string<br>    rg_name                                        = string<br>    location                                       = string<br>    app_service_plan_name                          = optional(string)<br>    service_plan_id                                = optional(string)<br>    os_type                                        = optional(string)<br>    sku_name                                       = string<br>    app_settings                                   = map(string)<br>    https_only                                     = optional(bool, true)<br>    tags                                           = optional(map(string))<br>    builtin_logging_enabled                        = optional(bool)<br>    client_certificate_enabled                     = optional(bool)<br>    client_certificate_mode                        = optional(string)<br>    client_certificate_exclusion_paths             = optional(string)<br>    content_share_force_disabled                   = optional(bool)<br>    daily_memory_time_quota                        = optional(number)<br>    enabled                                        = optional(bool, true)<br>    ftp_publish_basic_authentication_enabled       = optional(bool, false)<br>    public_network_access_enabled                  = optional(bool, true)<br>    key_vault_reference_identity_id                = optional(string)<br>    virtual_network_subnet_id                      = optional(string)<br>    webdeploy_publish_basic_authentication_enabled = optional(bool, false)<br>    zip_deploy_file                                = optional(string)<br>    functions_extension_version                    = optional(string, "~4")<br>    identity_type                                  = optional(string)<br>    identity_ids                                   = optional(list(string))<br>    storage_account_name                           = optional(string)<br>    storage_account_access_key                     = optional(string)<br>    storage_key_vault_secret_id                    = optional(string)<br>    storage_uses_managed_identity                  = optional(bool)<br>    storage_account = optional(object({<br>      access_key   = string<br>      account_name = string<br>      name         = string<br>      share_name   = string<br>      type         = string<br>      mount_path   = optional(string)<br>    }))<br>    sticky_settings = optional(object({<br>      app_setting_names       = optional(list(string))<br>      connection_string_names = optional(list(string))<br>    }))<br>    connection_string = optional(object({<br>      name  = optional(string)<br>      type  = optional(string)<br>      value = optional(string)<br>    }))<br>    backup = optional(object({<br>      name                = optional(string)<br>      enabled             = optional(bool)<br>      storage_account_url = optional(string)<br>      schedule = optional(object({<br>        frequency_interval       = optional(string)<br>        frequency_unit           = optional(string)<br>        keep_at_least_one_backup = optional(bool)<br>        retention_period_days    = optional(number)<br>        start_time               = optional(string)<br>      }))<br>    }))<br>    auth_settings_v2 = optional(object({<br>      auth_enabled                            = optional(bool)<br>      runtime_version                         = optional(string)<br>      config_file_path                        = optional(string)<br>      require_authentication                  = optional(bool)<br>      unauthenticated_action                  = optional(string)<br>      default_provider                        = optional(string)<br>      excluded_paths                          = optional(list(string))<br>      require_https                           = optional(bool)<br>      http_route_api_prefix                   = optional(string)<br>      forward_proxy_convention                = optional(string)<br>      forward_proxy_custom_host_header_name   = optional(string)<br>      forward_proxy_custom_scheme_header_name = optional(string)<br>      apple_v2 = optional(object({<br>        client_id                  = string<br>        client_secret_setting_name = string<br>        login_scopes               = list(string)<br>      }))<br>      active_directory_v2 = optional(object({<br>        client_id                            = string<br>        tenant_auth_endpoint                 = string<br>        client_secret_setting_name           = optional(string)<br>        client_secret_certificate_thumbprint = optional(string)<br>        jwt_allowed_groups                   = optional(list(string))<br>        jwt_allowed_client_applications      = optional(list(string))<br>        www_authentication_disabled          = optional(bool)<br>        allowed_groups                       = optional(list(string))<br>        allowed_identities                   = optional(list(string))<br>        allowed_applications                 = optional(list(string))<br>        login_parameters                     = optional(map(string))<br>        allowed_audiences                    = optional(list(string))<br>      }))<br>      azure_static_web_app_v2 = optional(object({<br>        client_id = string<br>      }))<br>      custom_oidc_v2 = optional(list(object({<br>        name                          = string<br>        client_id                     = string<br>        openid_configuration_endpoint = string<br>        name_claim_type               = optional(string)<br>        scopes                        = optional(list(string))<br>        client_credential_method      = string<br>        client_secret_setting_name    = string<br>        authorisation_endpoint        = string<br>        token_endpoint                = string<br>        issuer_endpoint               = string<br>        certification_uri             = string<br>      })))<br>      facebook_v2 = optional(object({<br>        app_id                  = string<br>        app_secret_setting_name = string<br>        graph_api_version       = optional(string)<br>        login_scopes            = optional(list(string))<br>      }))<br>      github_v2 = optional(object({<br>        client_id                  = string<br>        client_secret_setting_name = string<br>        login_scopes               = optional(list(string))<br>      }))<br>      google_v2 = optional(object({<br>        client_id                  = string<br>        client_secret_setting_name = string<br>        allowed_audiences          = optional(list(string))<br>        login_scopes               = optional(list(string))<br>      }))<br>      microsoft_v2 = optional(object({<br>        client_id                  = string<br>        client_secret_setting_name = string<br>        allowed_audiences          = optional(list(string))<br>        login_scopes               = optional(list(string))<br>      }))<br>      twitter_v2 = optional(object({<br>        consumer_key                 = string<br>        consumer_secret_setting_name = string<br>      }))<br>      login = optional(object({<br>        logout_endpoint                   = optional(string)<br>        token_store_enabled               = optional(bool)<br>        token_refresh_extension_time      = optional(number)<br>        token_store_path                  = optional(string)<br>        token_store_sas_setting_name      = optional(string)<br>        preserve_url_fragments_for_logins = optional(bool)<br>        allowed_external_redirect_urls    = optional(list(string))<br>        cookie_expiration_convention      = optional(string)<br>        cookie_expiration_time            = optional(string)<br>        validate_nonce                    = optional(bool)<br>        nonce_expiration_time             = optional(string)<br>      }))<br>    }))<br>    auth_settings = optional(object({<br>      enabled                        = optional(bool)<br>      additional_login_parameters    = optional(map(string))<br>      allowed_external_redirect_urls = optional(list(string))<br>      default_provider               = optional(string)<br>      issuer                         = optional(string)<br>      runtime_version                = optional(string)<br>      token_refresh_extension_hours  = optional(number)<br>      token_store_enabled            = optional(bool)<br>      unauthenticated_client_action  = optional(string)<br>      active_directory = optional(object({<br>        client_id                  = optional(string)<br>        client_secret              = optional(string)<br>        allowed_audiences          = optional(list(string))<br>        client_secret_setting_name = optional(string)<br>      }))<br>      facebook = optional(object({<br>        app_id                  = optional(string)<br>        app_secret              = optional(string)<br>        app_secret_setting_name = optional(string)<br>        oauth_scopes            = optional(list(string))<br>      }))<br>      google = optional(object({<br>        client_id                  = optional(string)<br>        client_secret              = optional(string)<br>        client_secret_setting_name = optional(string)<br>        oauth_scopes               = optional(list(string))<br>      }))<br>      microsoft = optional(object({<br>        client_id                  = optional(string)<br>        client_secret              = optional(string)<br>        client_secret_setting_name = optional(string)<br>        oauth_scopes               = optional(list(string))<br>      }))<br>      twitter = optional(object({<br>        consumer_key                 = optional(string)<br>        consumer_secret              = optional(string)<br>        consumer_secret_setting_name = optional(string)<br>      }))<br>      github = optional(object({<br>        client_id                  = optional(string)<br>        client_secret              = optional(string)<br>        client_secret_setting_name = optional(string)<br>        oauth_scopes               = optional(list(string))<br>      }))<br>    }))<br>    site_config = optional(object({<br>      always_on                                     = optional(bool)<br>      api_definition_url                            = optional(string)<br>      api_management_api_id                         = optional(string)<br>      app_command_line                              = optional(string)<br>      application_insights_connection_string        = optional(string)<br>      app_scale_limit                               = optional(string)<br>      application_insights_key                      = optional(string)<br>      container_registry_managed_identity_client_id = optional(string)<br>      container_registry_use_managed_identity       = optional(bool)<br>      elastic_instance_minimum                      = optional(number)<br>      ftps_state                                    = optional(string)<br>      health_check_path                             = optional(string)<br>      health_check_eviction_time_in_min             = optional(number)<br>      http2_enabled                                 = optional(bool)<br>      load_balancing_mode                           = optional(string)<br>      ip_restriction_default_action                 = optional(string)<br>      managed_pipeline_mode                         = optional(string)<br>      minimum_tls_version                           = optional(string, "1.2")<br>      pre_warmed_instance_count                     = optional(number)<br>      scm_ip_restriction_default_action             = optional(string)<br>      remote_debugging_enabled                      = optional(bool)<br>      remote_debugging_version                      = optional(string)<br>      runtime_scale_monitoring_enabled              = optional(bool)<br>      scm_minimum_tls_version                       = optional(string)<br>      scm_use_main_ip_restriction                   = optional(bool)<br>      use_32_bit_worker                             = optional(bool)<br>      app_scale_limit                               = optional(number)<br>      websockets_enabled                            = optional(bool)<br>      vnet_route_all_enabled                        = optional(bool)<br>      worker_count                                  = optional(number)<br>      default_documents                             = optional(list(string))<br>      application_stack = optional(object({<br>        java_version                = optional(string)<br>        use_dotnet_isolated_runtime = optional(bool)<br>        dotnet_version              = optional(string)<br>        node_version                = optional(string)<br>        powershell_core_version     = optional(string)<br>        use_custom_runtime          = optional(bool)<br>      }))<br>      app_service_logs = optional(object({<br>        disk_quota_mb         = optional(number)<br>        retention_period_days = optional(number)<br>      }))<br>      cors = optional(object({<br>        allowed_origins     = optional(list(string))<br>        support_credentials = optional(bool)<br>      }))<br>      ip_restriction = optional(list(object({<br>        ip_address                = optional(string)<br>        service_tag               = optional(string)<br>        virtual_network_subnet_id = optional(string)<br>        name                      = optional(string)<br>        priority                  = optional(number)<br>        action                    = optional(string)<br>        description               = optional(string)<br>        headers = optional(object({<br>          x_azure_fdid      = optional(string)<br>          x_fd_health_probe = optional(string)<br>          x_forwarded_for   = optional(string)<br>          x_forwarded_host  = optional(string)<br>        }))<br>      })))<br>      scm_ip_restriction = optional(list(object({<br>        ip_address                = optional(string)<br>        service_tag               = optional(string)<br>        virtual_network_subnet_id = optional(string)<br>        name                      = optional(string)<br>        priority                  = optional(number)<br>        description               = optional(string)<br>        action                    = optional(string)<br>        headers = optional(object({<br>          x_azure_fdid      = optional(string)<br>          x_fd_health_probe = optional(string)<br>          x_forwarded_for   = optional(string)<br>          x_forwarded_host  = optional(string)<br>        }))<br>      })))<br>    }))<br>    enable_vnet_integration = optional(bool)<br>    subnet_id               = optional(string)<br>  }))</pre> | `[]` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_function_app_identities"></a> [function\_app\_identities](#output\_function\_app\_identities) | The identities of the Storage Accounts. |
+| <a name="output_function_apps_custom_domain_verification_id"></a> [function\_apps\_custom\_domain\_verification\_id](#output\_function\_apps\_custom\_domain\_verification\_id) | The custom domain verification IDs of the windows Function Apps. |
+| <a name="output_function_apps_default_hostnames"></a> [function\_apps\_default\_hostnames](#output\_function\_apps\_default\_hostnames) | The default hostnames of the windows Function Apps. |
+| <a name="output_function_apps_outbound_ip_addresses"></a> [function\_apps\_outbound\_ip\_addresses](#output\_function\_apps\_outbound\_ip\_addresses) | The outbound IP addresses of the windows Function Apps. |
+| <a name="output_function_apps_possible_outbound_ip_addresses"></a> [function\_apps\_possible\_outbound\_ip\_addresses](#output\_function\_apps\_possible\_outbound\_ip\_addresses) | The possible outbound IP addresses of the windows Function Apps. |
+| <a name="output_function_apps_site_credentials"></a> [function\_apps\_site\_credentials](#output\_function\_apps\_site\_credentials) | The site credentials for the windows Function Apps. |
+| <a name="output_function_vnet_integration_ids"></a> [function\_vnet\_integration\_ids](#output\_function\_vnet\_integration\_ids) | The IDs of the App Service Virtual Network Swift Connections. |
+| <a name="output_service_plans_ids"></a> [service\_plans\_ids](#output\_service\_plans\_ids) | The IDs of the Service Plans. |
+| <a name="output_windows_function_apps_ids"></a> [windows\_function\_apps\_ids](#output\_windows\_function\_apps\_ids) | The IDs of the windows Function Apps. |
