@@ -1,4 +1,3 @@
-```hcl
 resource "azurerm_service_plan" "service_plan" {
   for_each            = { for app in var.windows_function_apps : app.name => app if app.app_service_plan_name != null }
   name                = each.value.app_service_plan_name != null ? each.value.app_service_plan_name : "asp-${each.value.name}"
@@ -465,4 +464,3 @@ resource "azurerm_app_service_virtual_network_swift_connection" "function_vnet_i
   app_service_id = azurerm_linux_function_app.function_app[each.value.name].id
   subnet_id      = each.value.subnet_id
 }
-```
