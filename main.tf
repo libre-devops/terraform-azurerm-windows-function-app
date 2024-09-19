@@ -13,7 +13,7 @@ resource "azurerm_windows_function_app" "function_app" {
   service_plan_id                                = each.value.service_plan_id != null ? each.value.service_plan_id : lookup(azurerm_service_plan.service_plan, each.key, null).id
   location                                       = each.value.location
   resource_group_name                            = each.value.rg_name
-  app_settings = each.value.create_new_app_insights == true && lookup(local.app_insights_map, each.value.app_insights_name, null) != null ? merge(each.value.app_settings, local.app_insights_map[each.value.app_insights_name]) : each.value.app_settings
+  app_settings                                   = each.value.create_new_app_insights == true && lookup(local.app_insights_map, each.value.app_insights_name, null) != null ? merge(each.value.app_settings, local.app_insights_map[each.value.app_insights_name]) : each.value.app_settings
   https_only                                     = each.value.https_only
   tags                                           = each.value.tags
   builtin_logging_enabled                        = each.value.builtin_logging_enabled
