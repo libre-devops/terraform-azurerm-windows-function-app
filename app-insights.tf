@@ -22,8 +22,8 @@ resource "azurerm_application_insights" "app_insights_workspace" {
 locals {
   app_insights_map = {
     for app_insights in azurerm_application_insights.app_insights_workspace : app_insights.name => {
-      APPINSIGHTS_INSTRUMENTATIONKEY = app_insights.instrumentation_key,
-      APPLICATIONINSIGHTS_CONNECTION_STRING  = app_insights.connection_string
+      APPINSIGHTS_INSTRUMENTATIONKEY        = app_insights.instrumentation_key,
+      APPLICATIONINSIGHTS_CONNECTION_STRING = app_insights.connection_string
     }
   }
 }
