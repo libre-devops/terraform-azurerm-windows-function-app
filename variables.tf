@@ -4,6 +4,7 @@ variable "windows_function_apps" {
     name                                           = string
     rg_name                                        = string
     location                                       = string
+    create_new_app_service_plan                    = optional(bool, true)
     app_service_plan_name                          = optional(string)
     service_plan_id                                = optional(string)
     os_type                                        = optional(string)
@@ -42,7 +43,6 @@ variable "windows_function_apps" {
     app_insights_local_authentication_disabled     = optional(bool, true)
     app_insights_force_customer_storage_for_profile= optional(bool, false)
     app_insights_sampling_percentage               = optional(number, 100)
-    tags                                           = optional(map(string))
 
     storage_account = optional(object({
       access_key   = string
@@ -214,7 +214,6 @@ variable "windows_function_apps" {
       api_management_api_id                         = optional(string)
       app_command_line                              = optional(string)
       application_insights_connection_string        = optional(string)
-      app_scale_limit                               = optional(string)
       application_insights_key                      = optional(string)
       container_registry_managed_identity_client_id = optional(string)
       container_registry_use_managed_identity       = optional(bool)

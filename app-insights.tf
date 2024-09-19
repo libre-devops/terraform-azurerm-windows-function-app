@@ -1,5 +1,8 @@
 resource "azurerm_application_insights" "app_insights_workspace" {
-  for_each = { for app in var.windows_function_apps : app.app_insights_name => app if app.create_new_app_insights == true && app.workspace_id != null }
+  for_each = {
+    for app in var.windows_function_apps : app.name => app
+    if app.create_new_app_insights == true && app.workspace_id != null && app.app_insights_name != null
+  }
 
   name                                  = each.value.app_insights_name != null ? each.value.app_insights_name : "appi-${each.value.name}"
   location                              = each.value.location
@@ -19,8 +22,8 @@ resource "azurerm_application_insights" "app_insights_workspace" {
 locals {
   app_insights_map = {
     for app_insights in azurerm_application_insights.app_insights_workspace : app_insights.name => {
-      instrumentation_key = app_insights.instrumentation_key,
-      connection_string   = app_insights.connection_string
+      APPINSIGHTS_INSTRUMENTATIONKEY = app_insights.instrumentation_key,
+      APPLICATIONINSIGHTS_CONNECTION_STRING  = app_insights.connection_string
     }
   }
 }

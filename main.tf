@@ -1,5 +1,5 @@
 resource "azurerm_service_plan" "service_plan" {
-  for_each            = { for app in var.windows_function_apps : app.name => app if app.app_service_plan_name != null }
+  for_each            = { for app in var.windows_function_apps : app.name => app if app.create_new_app_service_plan == true }
   name                = each.value.app_service_plan_name != null ? each.value.app_service_plan_name : "asp-${each.value.name}"
   resource_group_name = each.value.rg_name
   location            = each.value.location
@@ -350,7 +350,7 @@ resource "azurerm_windows_function_app" "function_app" {
       api_management_api_id                  = site_config.value.api_management_api_id
       app_command_line                       = site_config.value.app_command_line
       application_insights_connection_string = site_config.value.application_insights_connection_string
-      application_insights_key               = site_config.value.application_insights_ke
+      application_insights_key               = site_config.value.application_insights_key
       elastic_instance_minimum               = site_config.value.elastic_instance_minimum
       ftps_state                             = site_config.value.ftps_state
       health_check_path                      = site_config.value.health_check_path

@@ -39,11 +39,6 @@ output "function_apps_site_credentials" {
   value       = { for app in azurerm_windows_function_app.function_app : app.name => app.site_credential }
 }
 
-output "function_vnet_integration_ids" {
-  description = "The IDs of the App Service Virtual Network Swift Connections."
-  value       = { for conn in azurerm_app_service_virtual_network_swift_connection.function_vnet_integration : conn.name => conn.id }
-}
-
 output "service_plans_ids" {
   description = "The IDs of the Service Plans."
   value       = { for plan in azurerm_service_plan.service_plan : plan.name => plan.id }

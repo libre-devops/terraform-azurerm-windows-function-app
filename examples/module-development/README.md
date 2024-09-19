@@ -31,7 +31,7 @@ module "subnet_calculator" {
   source = "libre-devops/subnet-calculator/null"
 
   base_cidr    = local.lookup_cidr[var.short][var.env][0]
-  subnet_sizes = [26, 26, 27]
+  subnet_sizes = [26, 26, 26]
 }
 
 module "network" {
@@ -50,9 +50,17 @@ module "network" {
     name => {
       address_prefixes  = toset([module.subnet_calculator.subnet_ranges[i]])
       service_endpoints = ["Microsoft.KeyVault", "Microsoft.Storage"]
+
+      # Only assign delegation to subnet3
+      delegation = name == "subnet3" ? [
+        {
+          type = "Microsoft.Web/serverFarms" # Delegation type for subnet3
+        },
+      ] : []
     }
   }
 }
+
 
 data "http" "user_ip" {
   url = "https://checkip.amazonaws.com"
@@ -71,13 +79,12 @@ module "role_assignments" {
   ]
 }
 module "law" {
-  source = "registry.terraform.io/libre-devops/log-analytics-workspace/azurerm"
+  source = "libre-devops/log-analytics-workspace/azurerm"
 
   rg_name  = module.rg.rg_name
   location = module.rg.rg_location
   tags     = module.rg.rg_tags
 
-  create_new_workspace       = true
   law_name                   = "law-${var.short}-${var.loc}-${var.env}-01"
   law_sku                    = "PerGB2018"
   retention_in_days          = "30"
@@ -87,7 +94,7 @@ module "law" {
 }
 
 module "key_vault" {
-  source = "registry.terraform.io/libre-devops/keyvault/azurerm"
+  source = "libre-devops/keyvault/azurerm"
 
   key_vaults = [
     {
@@ -150,6 +157,63 @@ module "sa" {
     },
   ]
 }
+
+
+module "windows_function_app" {
+  source = "../../"
+
+  depends_on = [module.law]
+
+  # Application Insights Configuration
+  windows_function_apps = [
+    {
+      name     = "fnc-${var.short}-${var.loc}-${var.env}-01"
+      rg_name  = module.rg.rg_name
+      location = module.rg.rg_location
+      tags     = module.rg.rg_tags
+
+      os_type  = "Windows"
+      sku_name = "P1v2"
+      app_settings = {
+        "FUNCTIONS_WORKER_RUNTIME" = "dotnet-isolated"
+        "DOTNET_ENVIRONMENT"       = "Production"
+      }
+      builtin_logging_enabled         = true
+      public_network_access_enabled   = true
+      key_vault_reference_identity_id = azurerm_user_assigned_identity.uid.id
+      virtual_network_subnet_id       = module.network.subnets_ids["subnet3"]
+      identity_type                   = "UserAssigned"
+      identity_ids                    = [azurerm_user_assigned_identity.uid.id]
+      storage_account_name            = module.sa.storage_account_names["sa${var.short}${var.loc}${var.env}01"]
+      storage_uses_managed_identity   = true
+
+
+      create_new_app_insights                            = true
+      workspace_id                                       = module.law.law_id
+      app_insights_name                                  = "appi-fnc-${var.short}-${var.loc}-${var.env}-01"
+      app_insights_type                                  = "web"
+      app_insights_daily_cap_in_gb                       = 0.5
+      app_insights_daily_data_cap_notifications_disabled = false
+      app_insights_internet_ingestion_enabled            = false
+      app_insights_internet_query_enabled                = false
+      app_insights_local_authentication_disabled         = true
+      app_insights_sampling_percentage                   = 100
+
+      # Site Configuration
+      site_config = {
+        always_on              = true
+        minimum_tls_version    = "1.2"
+        vnet_route_all_enabled = true
+        use_32_bit_worker      = false
+        worker_count           = 1
+        application_stack = {
+          dotnet_version              = "v8.0"
+          use_dotnet_isolated_runtime = true
+        }
+      }
+    }
+  ]
+}
 ```
 ## Requirements
 
@@ -159,22 +223,23 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
-| <a name="provider_http"></a> [http](#provider\_http) | n/a |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 4.2.0 |
+| <a name="provider_http"></a> [http](#provider\_http) | 3.4.5 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.6.3 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_key_vault"></a> [key\_vault](#module\_key\_vault) | registry.terraform.io/libre-devops/keyvault/azurerm | n/a |
-| <a name="module_law"></a> [law](#module\_law) | registry.terraform.io/libre-devops/log-analytics-workspace/azurerm | n/a |
+| <a name="module_key_vault"></a> [key\_vault](#module\_key\_vault) | libre-devops/keyvault/azurerm | n/a |
+| <a name="module_law"></a> [law](#module\_law) | libre-devops/log-analytics-workspace/azurerm | n/a |
 | <a name="module_network"></a> [network](#module\_network) | libre-devops/network/azurerm | n/a |
 | <a name="module_rg"></a> [rg](#module\_rg) | libre-devops/rg/azurerm | n/a |
 | <a name="module_role_assignments"></a> [role\_assignments](#module\_role\_assignments) | github.com/libre-devops/terraform-azurerm-role-assignment | n/a |
 | <a name="module_sa"></a> [sa](#module\_sa) | registry.terraform.io/libre-devops/storage-account/azurerm | n/a |
 | <a name="module_shared_vars"></a> [shared\_vars](#module\_shared\_vars) | libre-devops/shared-vars/azurerm | n/a |
 | <a name="module_subnet_calculator"></a> [subnet\_calculator](#module\_subnet\_calculator) | libre-devops/subnet-calculator/null | n/a |
+| <a name="module_windows_function_app"></a> [windows\_function\_app](#module\_windows\_function\_app) | ../../ | n/a |
 
 ## Resources
 
