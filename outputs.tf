@@ -14,6 +14,11 @@ output "function_app_identities" {
   }
 }
 
+output "function_app_names" {
+  description = "The default name of the windows Function Apps."
+  value       = { for app in azurerm_windows_function_app.function_app : app.name => app.name }
+}
+
 output "function_apps_custom_domain_verification_id" {
   description = "The custom domain verification IDs of the windows Function Apps."
   value       = { for app in azurerm_windows_function_app.function_app : app.name => app.custom_domain_verification_id }

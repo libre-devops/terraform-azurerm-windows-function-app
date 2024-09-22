@@ -491,6 +491,7 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_function_app_identities"></a> [function\_app\_identities](#output\_function\_app\_identities) | The identities of the Storage Accounts. |
+| <a name="output_function_app_names"></a> [function\_app\_names](#output\_function\_app\_names) | The default name of the windows Function Apps. |
 | <a name="output_function_apps_custom_domain_verification_id"></a> [function\_apps\_custom\_domain\_verification\_id](#output\_function\_apps\_custom\_domain\_verification\_id) | The custom domain verification IDs of the windows Function Apps. |
 | <a name="output_function_apps_default_hostnames"></a> [function\_apps\_default\_hostnames](#output\_function\_apps\_default\_hostnames) | The default hostnames of the windows Function Apps. |
 | <a name="output_function_apps_outbound_ip_addresses"></a> [function\_apps\_outbound\_ip\_addresses](#output\_function\_apps\_outbound\_ip\_addresses) | The outbound IP addresses of the windows Function Apps. |
